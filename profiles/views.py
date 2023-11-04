@@ -17,7 +17,8 @@ def index(request):
     with the list of profiles provided in the 'profiles_list' context variable.
 
     Example Usage:
-        To display a list of user profiles, you can include this view in your Django project's URLs configuration.
+        To display a list of user profiles,
+         you can include this view in your Django project's URLs configuration.
 
     """
     profiles_list = Profile.objects.all()
@@ -36,11 +37,14 @@ def profile(request, username):
     Returns:
         HttpResponse: A rendered HTML page displaying the user's profile.
 
-    Retrieves the user's profile from the database using the provided username, and then renders the
-    'profiles/profile.html' template with the user's profile information provided in the 'profile' context variable.
+    Retrieves the user's profile from the database using the provided username,
+     and then renders the
+    'profiles/profile.html' template with the user's profile information
+    provided in the 'profile' context variable.
 
     Example Usage:
-        To display a user's profile, you can include this view in your Django project's URLs configuration, passing the
+        To display a user's profile, you can include this view
+        in your Django project's URLs configuration, passing the
         username as a parameter in the URL.
     """
     profile_detail = Profile.objects.get(user__username=username)

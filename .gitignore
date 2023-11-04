@@ -1,3 +1,7 @@
 **/__pycache__
 *.pyc
 venv
+reports/coverage/*
+reports/flake8/*
+reports/junit/*
+.idea/

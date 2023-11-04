@@ -1,0 +1,74 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@2.0.0
+
+jobs:
+  build-and-test:
+    docker:
+      - image: python:3.12
+    steps:
+      - checkout
+      - run:
+          name: install packages
+          command: |
+            pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Tests
+          command: pytest
+      - run:
+          name: Linting
+          command: flake8
+
+  containerize:
+    docker:
+      - image: docker:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Containerize
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_LOGIN --password-stdin
+            docker build -t tortique/img_docker:$CIRCLE_SHA1 .
+            docker push tortique/img_docker:$CIRCLE_SHA1
+
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - setup_remote_docker
+      - heroku/install
+      - run:
+          name: Heroku
+          command: |
+            echo $SENTRY_DSN
+            curl https://cli-assets.heroku.com/install.sh | sh
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku config:set SECRET_KEY=$SECRET_KEY -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku config:set SENTRY_DSN=$SENTRY_DSN -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a $HEROKU_APP_NAME web
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a $HEROKU_APP_NAME web
+
+            
+
+workflows:
+  main-workflow:
+    jobs:
+      - build-and-test
+      - containerize:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - master
+      - deploy:
+          requires:
+            - build-and-test
+            - containerize
+          filters:
+            branches:
+              only:
+                - master
