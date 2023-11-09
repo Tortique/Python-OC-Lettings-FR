@@ -34,22 +34,14 @@ jobs:
             docker build -t tortique/img_docker:$CIRCLE_SHA1 .
             docker push tortique/img_docker:$CIRCLE_SHA1
 
-  deploy:
-    executor: heroku/default
+  Deployment:
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
-      - setup_remote_docker
-      - heroku/install
       - run:
-          name: Heroku
-          command: |
-            echo $SENTRY_DSN
-            curl https://cli-assets.heroku.com/install.sh | sh
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku config:set SECRET_KEY=$SECRET_KEY -a $HEROKU_APP_NAME
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku config:set SENTRY_DSN=$SENTRY_DSN -a $HEROKU_APP_NAME
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a $HEROKU_APP_NAME web
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a $HEROKU_APP_NAME web
+    name: "Deploy"
+    command: curl -X GET https://api.render.com/deploy/srv-cl683thk857s73cph6ug?key=wviVrZ_IoRs
 
             
 

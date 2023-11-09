@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'Orange County Lettings'
+copyright = '2023, Tortique'
+author = 'Tortique'
 
 release = '0.1'
 version = '0.1.0'
