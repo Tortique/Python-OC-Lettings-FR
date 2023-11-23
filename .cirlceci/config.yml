@@ -33,7 +33,17 @@ jobs:
             echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_LOGIN --password-stdin
             docker build -t tortique/img_docker:$CIRCLE_SHA1 .
             docker push tortique/img_docker:$CIRCLE_SHA1
-
+  deploy-dev:
+    machine: true
+    steps:
+      -checkout
+      - run:
+          name: Build and push Docker image to Heroku
+          command: |
+            sudo curl https://cli-assets.heroku.com/install.sh | sh
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-ad web
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-ad web
   Deployment:
     docker:
       - image: cimg/base:stable
