@@ -19,7 +19,6 @@ def index(request):
     Example Usage:
         To display a list of user profiles,
          you can include this view in your Django project's URLs configuration.
-
     """
     profiles_list = Profile.objects.all()
     context = {'profiles_list': profiles_list}
