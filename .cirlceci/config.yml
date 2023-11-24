@@ -60,11 +60,11 @@ jobs:
 workflows:
   main-workflow:
     jobs:
+      - test
       - build-and-test:
            filters:
              branches:
                only: master
-      - test
       - containerize:
           requires:
             - build-and-test
