@@ -20,6 +20,9 @@ jobs:
       - run:
           name: Linting
           command: flake8
+  test:
+    -run :
+      echo "Toto"
 
   containerize:
     docker:
@@ -61,6 +64,7 @@ workflows:
            filters:
              branches:
                only: master
+      - test
       - containerize:
           requires:
             - build-and-test
@@ -69,7 +73,6 @@ workflows:
               only: master
       - deploy:
           requires:
-            - build-and-test
             - containerize
           filters:
             branches:
