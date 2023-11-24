@@ -60,20 +60,23 @@ jobs:
 workflows:
   main-workflow:
     jobs:
-      - test
+      - test:
+        filters:
+          branches:
+            only: master
       - build-and-test:
-           filters:
-             branches:
-               only: master
+        filters:
+          branches:
+            only: master
       - containerize:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
+        requires:
+          - build-and-test
+        filters:
+          branches:
+            only: master
       - deploy:
-          requires:
-            - containerize
-          filters:
-            branches:
-              only: master
+        requires:
+          - containerize
+        filters:
+          branches:
+            only: master
