@@ -47,13 +47,13 @@ jobs:
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-ad web
 
   deploy-render:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-    name: "Deploy"
-    command: curl -X GET https://api.render.com/deploy/srv-cl683thk857s73cph6ug?key=wviVrZ_IoRs
+      docker:
+          - image: cimg/base:stable
+      steps:
+          - checkout
+          - run:
+      name: "Deploy"
+      command: curl -X GET https://api.render.com/deploy/srv-cl683thk857s73cph6ug?key=wviVrZ_IoRs
 
 workflows:
   main-workflow:
