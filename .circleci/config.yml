@@ -20,9 +20,6 @@ jobs:
       - run:
           name: Linting
           command: flake8
-  test:
-    -run :
-      echo "Toto"
 
   containerize:
     docker:
@@ -40,7 +37,7 @@ jobs:
   deploy:
     machine: true
     steps:
-      -checkout
+      - checkout
       - run:
           name: Build and push Docker image to Heroku
           command: |
@@ -48,7 +45,8 @@ jobs:
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-ad web
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-ad web
-  Deployment:
+
+  deploy-render:
     docker:
       - image: cimg/base:stable
     steps:
@@ -60,23 +58,25 @@ jobs:
 workflows:
   main-workflow:
     jobs:
-      - test:
-        filters:
-          branches:
-            only: master
       - build-and-test:
-        filters:
-          branches:
-            only: master
+          filters:
+            branches:
+              only: master
       - containerize:
-        requires:
-          - build-and-test
+          requires:
+            - build-and-test
         filters:
           branches:
             only: master
       - deploy:
-        requires:
-          - containerize
-        filters:
-          branches:
-            only: master
+          requires:
+            - containerize
+          filters:
+            branches:
+              only: master
+      - deploy-render:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only: master
