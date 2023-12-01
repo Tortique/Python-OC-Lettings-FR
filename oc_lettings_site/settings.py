@@ -116,6 +116,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static",]
 
 sentry_sdk.init(
+    dsn="https://108300ffed337efffd016dcc5f27ae86@o4506321581768704.ingest.sentry.io/4506321584783360",
     integrations=[
         DjangoIntegration(
             transaction_style='url',
