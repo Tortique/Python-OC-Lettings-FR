@@ -75,3 +75,13 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 - Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
 - Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+
+### Déploiement
+
+Le déploiement s'effectue en éxécutant un pipeline CI/CD de `Circle CI` après un push sur la branche master (ou par l'interface web de Circle CI)
+
+Pour cela, il faut configurer les variables d'environnements sur `Circle CI`:
+  - `DOCKER_LOGIN` = Nom d'utilisateur Docker
+  - `DOCKER_PASSWORD` = Mot de passe Docker
+  - `HEROKU_TOKEN` = Clé d'API de votre application `Heroku`.
+
